@@ -37,7 +37,10 @@ app.get '/connect/:game_id', (req, res) ->
                         url: req.headers.host + req.url
 
 socket.sockets.on 'connection', (client) ->
-  console.log 'Client connected: ' + client
+  socket.emit 'join', { hello: 'world' }
+  console.log '----'
+  console.log 'Client connected'
+  console.log '----'
 
 port = process.env.PORT || 8080
 app.listen port

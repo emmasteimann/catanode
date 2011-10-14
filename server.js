@@ -48,7 +48,12 @@
     });
   });
   socket.sockets.on('connection', function(client) {
-    return console.log('Client connected: ' + client);
+    socket.emit('join', {
+      hello: 'world'
+    });
+    console.log('----');
+    console.log('Client connected');
+    return console.log('----');
   });
   port = process.env.PORT || 8080;
   app.listen(port);

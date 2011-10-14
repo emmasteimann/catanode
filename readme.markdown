@@ -1,5 +1,7 @@
 # Initial TODO
 
+Things I should do first.
+
 ## Create Game
 
  * Reserve key.

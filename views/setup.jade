@@ -3,6 +3,8 @@ html(lang="en")
   head
     title Catan game setup
     link(href="/stylesheets/style.css", media="screen", rel="stylesheet", type="text/css")
+    script(type="text/javascript", src="/socket.io/socket.io.js")
+    script(type="text/javascript", src="/javascripts/socket.js")
   body
     #wrapper
       h1 Game #
@@ -16,7 +18,7 @@ html(lang="en")
               h2= player.name
               p= player.status
             - else
-              input(type='text', value='name')
+              input(type='text', value='name', maxlength='25')
               a.join(href='#') Join
       #invite
         - if(url)
