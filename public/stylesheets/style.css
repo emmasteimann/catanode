@@ -1,0 +1,43 @@
+@import url(reset.css);
+
+#wrapper {
+  min-width: 780px;
+  max-width: 1080px;
+  width: 90%;
+  padding: 0 5%;
+  margin: 0 auto;
+}
+
+#players {
+  float: left;
+  width: 100%;
+}
+
+#players .player {
+  width: 23%;
+  margin: 0 1%;
+  float: left;
+}
+
+#players .player * {
+  width: 100%;
+}
+
+#players .player a.join {
+  color: #fff;
+  background: rgb(204, 204, 204);
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  -webkit-box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  -moz-box-shadow: 0 0px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  padding: 2px 7px;
+  margin-top: 6px;
+  float: left;
+  width: auto;
+}
+
+#players .player a.join:hover {
+  
+}

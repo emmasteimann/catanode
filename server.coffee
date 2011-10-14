@@ -15,21 +15,26 @@ app.set 'view engine', 'jade'
 app.set 'view options', {
   layout: false
 }
-app.use stylus.middleware {
-  src: './views',
-  dest: './public'
-}
+app.use express.static(__dirname + "/public/")
 
 app.get '/', (req, res) ->
   res.render 'index'
 
 app.get '/connect/:game_id', (req, res) ->
   players = []
-  for i in [1..4]
-    players.push({ name: 'foo' + i})
-  console.log players
+  for i in [1..2]
+    if i == 1
+      status = 'creator'
+    else
+      status = 'player'
+
+    players.push({ name: 'foo' + i, ip: '0.0.0.0', icon:'http://placekitten.com/400/300', status: status })
+  players.push({ icon:'http://placekitten.com/400/300' })
+  players.push({ icon:'http://placekitten.com/400/300' })
   res.render 'setup', locals:
-                        players: players
+                        game_id: req.params.game_id
+                        players: players,
+                        url: req.headers.host + req.url
 
 socket.sockets.on 'connection', (client) ->
   console.log 'Client connected: ' + client

@@ -13,25 +13,37 @@
   app.set('view options', {
     layout: false
   });
-  app.use(stylus.middleware({
-    src: './views',
-    dest: './public'
-  }));
+  app.use(express.static(__dirname + "/public/"));
   app.get('/', function(req, res) {
     return res.render('index');
   });
   app.get('/connect/:game_id', function(req, res) {
-    var i, players;
+    var i, players, status;
     players = [];
-    for (i = 1; i <= 4; i++) {
+    for (i = 1; i <= 2; i++) {
+      if (i === 1) {
+        status = 'creator';
+      } else {
+        status = 'player';
+      }
       players.push({
-        name: 'foo' + i
+        name: 'foo' + i,
+        ip: '0.0.0.0',
+        icon: 'http://placekitten.com/400/300',
+        status: status
       });
     }
-    console.log(players);
+    players.push({
+      icon: 'http://placekitten.com/400/300'
+    });
+    players.push({
+      icon: 'http://placekitten.com/400/300'
+    });
     return res.render('setup', {
       locals: {
-        players: players
+        game_id: req.params.game_id,
+        players: players,
+        url: req.headers.host + req.url
       }
     });
   });
