@@ -20,8 +20,8 @@
   app.get('/create', function(req, res) {
     var game_port;
     game_port = 4444;
-    console.log(socket.sockets.manager.rooms);
-    return res.redirect('connect/' + game_port);
+    socket.rooms[game_port] = {};
+    return res.redirect('/connect/' + game_port);
   });
   app.get('/connect', function(req, res) {
     return res.render('index');

@@ -22,8 +22,8 @@ app.get '/', (req, res) ->
 
 app.get '/create', (req, res) ->
   game_port = 4444
-  console.log socket.sockets.manager.rooms
-  res.redirect 'connect/' + game_port
+  socket.rooms[game_port] = {}
+  res.redirect '/connect/' + game_port
 
 app.get '/connect', (req, res) ->
   res.render 'index'
