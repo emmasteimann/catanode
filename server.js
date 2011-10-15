@@ -17,6 +17,12 @@
   app.get('/', function(req, res) {
     return res.render('index');
   });
+  app.get('/create', function(req, res) {
+    return res.render('index');
+  });
+  app.get('/connect', function(req, res) {
+    return res.render('index');
+  });
   app.get('/connect/:game_id', function(req, res) {
     var i, players, status;
     players = [];
@@ -48,12 +54,12 @@
     });
   });
   socket.sockets.on('connection', function(client) {
-    socket.emit('join', {
-      hello: 'world'
+    client.emit('connect', {
+      game: 'foo'
     });
-    console.log('----');
-    console.log('Client connected');
-    return console.log('----');
+    return client.on('join_lobby', function(data) {
+      return console.log(data);
+    });
   });
   port = process.env.PORT || 8080;
   app.listen(port);

@@ -20,6 +20,12 @@ app.use express.static(__dirname + "/public/")
 app.get '/', (req, res) ->
   res.render 'index'
 
+app.get '/create', (req, res) ->
+  res.render 'index'
+
+app.get '/connect', (req, res) ->
+  res.render 'index'
+
 app.get '/connect/:game_id', (req, res) ->
   players = []
   for i in [1..2]
@@ -37,10 +43,9 @@ app.get '/connect/:game_id', (req, res) ->
                         url: req.headers.host + req.url
 
 socket.sockets.on 'connection', (client) ->
-  socket.emit 'join', { hello: 'world' }
-  console.log '----'
-  console.log 'Client connected'
-  console.log '----'
+  client.emit 'connect', { game: 'foo' }
+  client.on 'join_lobby', (data) ->
+    console.log data
 
 port = process.env.PORT || 8080
 app.listen port
