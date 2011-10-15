@@ -21,7 +21,9 @@ app.get '/', (req, res) ->
   res.render 'index'
 
 app.get '/create', (req, res) ->
-  res.render 'index'
+  game_port = 4444
+  console.log socket.sockets.manager.rooms
+  res.redirect 'connect/' + game_port
 
 app.get '/connect', (req, res) ->
   res.render 'index'
@@ -43,7 +45,7 @@ app.get '/connect/:game_id', (req, res) ->
                         url: req.headers.host + req.url
 
 socket.sockets.on 'connection', (client) ->
-  client.emit 'connect', { game: 'foo' }
+  socket.sockets.emit 'connect', { user: 'joined' }
   client.on 'join_lobby', (data) ->
     console.log data
 

@@ -18,7 +18,10 @@
     return res.render('index');
   });
   app.get('/create', function(req, res) {
-    return res.render('index');
+    var game_port;
+    game_port = 4444;
+    console.log(socket.sockets.manager.rooms);
+    return res.redirect('connect/' + game_port);
   });
   app.get('/connect', function(req, res) {
     return res.render('index');
@@ -54,8 +57,8 @@
     });
   });
   socket.sockets.on('connection', function(client) {
-    client.emit('connect', {
-      game: 'foo'
+    socket.sockets.emit('connect', {
+      user: 'joined'
     });
     return client.on('join_lobby', function(data) {
       return console.log(data);
