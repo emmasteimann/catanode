@@ -45,9 +45,14 @@ app.get '/connect/:game_id', (req, res) ->
                         url: req.headers.host + req.url
 
 socket.sockets.on 'connection', (client) ->
+  console.log ' ------ '
+  console.log socket.rooms
+  console.log ' ------ '
   socket.sockets.emit 'connect', { user: 'joined' }
+  #client.sockets.in(2).emit 'test', { foo: 'bar' }
   client.on 'join_lobby', (data) ->
     console.log data
+    client.join data.game
 
 port = process.env.PORT || 8080
 app.listen port

@@ -57,11 +57,15 @@
     });
   });
   socket.sockets.on('connection', function(client) {
+    console.log(' ------ ');
+    console.log(socket.rooms);
+    console.log(' ------ ');
     socket.sockets.emit('connect', {
       user: 'joined'
     });
     return client.on('join_lobby', function(data) {
-      return console.log(data);
+      console.log(data);
+      return client.join(data.game);
     });
   });
   port = process.env.PORT || 8080;
