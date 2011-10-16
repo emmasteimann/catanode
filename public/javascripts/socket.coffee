@@ -11,3 +11,6 @@ jQuery(document).ready ->
   $('a.join').click (e) ->
     #socket.emit 'join_lobby', { name: $(this).prev().val(), url: document.URL }
     return false
+
+  # chat
+

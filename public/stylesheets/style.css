@@ -41,3 +41,21 @@
 #players .player a.join:hover {
   
 }
+
+/* chat */
+#chat { /* total: 55% */
+  width: 48.5%;
+  float: left;
+  margin: 40px 5.5% 0 1%;
+  overflow-y: scroll;
+  overflow-x: ;
+}
+
+#chat #display {
+  width: 100%;
+  border: 1px solid #ccc;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  height: 140px;
+}
