@@ -36,27 +36,12 @@
     return res.render('index');
   });
   app.get('/connect/:game_id', function(req, res) {
-    var i, players, status;
+    var item, players;
     players = [];
-    for (i = 1; i <= 2; i++) {
-      if (i === 1) {
-        status = 'creator';
-      } else {
-        status = 'player';
-      }
-      players.push({
-        name: 'foo' + i,
-        ip: '0.0.0.0',
-        icon: 'http://placekitten.com/400/300',
-        status: status
-      });
+    for (item = 1; item <= 4; item++) {
+      players.push('');
     }
-    players.push({
-      icon: 'http://placekitten.com/400/300'
-    });
-    players.push({
-      icon: 'http://placekitten.com/400/300'
-    });
+    console.log(players);
     return res.render('setup', {
       locals: {
         game_id: req.params.game_id,
@@ -65,16 +50,21 @@
       }
     });
   });
+  Array.prototype.last = function() {
+    return this[this.length - 1];
+  };
+  String.prototype.port = function() {
+    return this.split('/').last().split(/[^0-9]/)[0];
+  };
   socket.sockets.on('connection', function(client) {
-    console.log(' ------ ');
+    console.log(' - Game Rooms - ');
     console.log(socket.rooms);
-    console.log(' ------ ');
-    socket.sockets.emit('connect', {
-      user: 'joined'
+    console.log(' -------------- ');
+    client.on('join_lobby', function(data) {
+      return client.join(data.url.port());
     });
-    return client.on('join_lobby', function(data) {
-      console.log(data);
-      return client.join(data.game);
+    return client.on('join_game', function(data) {
+      return console.log('foo');
     });
   });
   port = process.env.PORT || 8080;

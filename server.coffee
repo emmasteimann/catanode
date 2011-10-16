@@ -37,29 +37,32 @@ app.get '/connect', (req, res) ->
 app.get '/connect/:game_id', (req, res) ->
   # test players
   players = []
-  for i in [1..2]
-    if i == 1
-      status = 'creator'
-    else
-      status = 'player'
-    players.push({ name: 'foo' + i, ip: '0.0.0.0', icon:'http://placekitten.com/400/300', status: status })
-  players.push({ icon:'http://placekitten.com/400/300' })
-  players.push({ icon:'http://placekitten.com/400/300' })
+  for item in [1..4]
+    players.push ''
+  console.log players
   # end test
   res.render 'setup', locals:
                       game_id: req.params.game_id
                       players: players,
                       url: req.headers.host + req.url
 
+Array::last = ->
+  return this[this.length-1]
+
+String::port = ->
+  return this.split('/').last().split(/[^0-9]/)[0]
+
+# games needs: join_lobby, join_game, leave_game, (?) start_game
 socket.sockets.on 'connection', (client) ->
-  console.log ' ------ '
+  console.log ' - Game Rooms - '
   console.log socket.rooms
-  console.log ' ------ '
-  socket.sockets.emit 'connect', { user: 'joined' }
+  console.log ' -------------- '
+  #socket.sockets.emit 'connect', { user: 'joined' }
   #client.sockets.in(2).emit 'test', { foo: 'bar' }
-  client.on 'join_lobby', (data) ->
-    console.log data
-    client.join data.game
+  client.on 'join_lobby', (data) -> # any user joins the main lobby
+    client.join data.url.port()
+  client.on 'join_game', (data) ->
+    console.log 'foo'
 
 port = process.env.PORT || 8080
 app.listen port
