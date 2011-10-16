@@ -25,14 +25,14 @@ class Games
     @new_allowed = true # whether or not games should be allowed
     
   create: (callback) ->
-    return 'No new games may be created' if @new_allowed == false
+    return 'No new games may be created' if @new_allowed == false # fallback if too many games exist
     game_id = @req_unused_game()
-    
     @list[game_id] = { status: 'lobby', players: [] }
+    game_id
   
   req_unused_game: ->
     game_id = Math.floor Math.random() * @maximum
-    @new_allowed = false if Object.keys(@list).length == @maximum - 500
+    @new_allowed = false if Object.keys(@list).length == @maximum - (@maximum / 20) # leeway to not bog the server down (5%)
     return @req_unused_game() if @list[game_id]? # re-run method if game is active
     game_id
     
@@ -45,9 +45,13 @@ app.get '/', (req, res) ->
   res.render 'index'
 
 app.get '/create', (req, res) ->
-  game_port = 4444
-  socket.rooms[game_port] = {}
-  res.redirect '/connect/' + game_port
+  game_port = games.create()
+  if typeof game_port == 'number'
+    socket.rooms[game_port] = {}
+    res.redirect '/connect/' + game_port
+  else
+    res.redirect '/error', locals:
+                           reason: game_port
 
 app.get '/connect', (req, res) ->
   res.render 'index'

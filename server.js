@@ -26,15 +26,16 @@
         return 'No new games may be created';
       }
       game_id = this.req_unused_game();
-      return this.list[game_id] = {
+      this.list[game_id] = {
         status: 'lobby',
         players: []
       };
+      return game_id;
     };
     Games.prototype.req_unused_game = function() {
       var game_id;
       game_id = Math.floor(Math.random() * this.maximum);
-      if (Object.keys(this.list).length === this.maximum - 500) {
+      if (Object.keys(this.list).length === this.maximum - (this.maximum / 20)) {
         this.new_allowed = false;
       }
       if (this.list[game_id] != null) {
@@ -51,9 +52,17 @@
   });
   app.get('/create', function(req, res) {
     var game_port;
-    game_port = 4444;
-    socket.rooms[game_port] = {};
-    return res.redirect('/connect/' + game_port);
+    game_port = games.create();
+    if (typeof game_port === 'number') {
+      socket.rooms[game_port] = {};
+      return res.redirect('/connect/' + game_port);
+    } else {
+      return res.redirect('/error', {
+        locals: {
+          reason: game_port
+        }
+      });
+    }
   });
   app.get('/connect', function(req, res) {
     return res.render('index');
