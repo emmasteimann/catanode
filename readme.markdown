@@ -1,10 +1,11 @@
-# Initial TODO
+# TODO
 
-Things I should do first.
+## Testing
+
+Need to start testing methods and routes.
 
 ## Create Game
 
- * Reserve key.
  * Route to connection.
  * Set creator.
 
@@ -19,3 +20,14 @@ Things I should do first.
 
  * Consider how backbone will be organized.
  * Rembmer structures, points, board, turns, reconnections, materials.
+
+## Error
+
+Page for when a user attempts to create a game when there is a limit
+
+# Complete
+
+  * Socket connection.
+  * Games creation with a limit.
+  * Lobby initialize
+  * Templating
