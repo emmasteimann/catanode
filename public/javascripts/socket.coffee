@@ -14,3 +14,13 @@ jQuery(document).ready ->
 
   # chat
 
+  $('#chat a').click (e) ->
+    message = $(this).prev().val()
+    if message
+      socket.emit 'game_message', { name: 'Name', message: message, game: document.URL }
+      $(this).prev().val('')
+    e.stopPropagation()
+    e.preventDefault()
+
+  socket.on 'message', (data) ->
+    $('#chat #display').append('<p>' + data.name + ': ' + data.message + '</p>')

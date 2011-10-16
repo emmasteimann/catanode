@@ -1,5 +1,4 @@
 http = require 'http'
-
 _ = require 'underscore'
 backbone = require 'backbone'
 
@@ -50,7 +49,7 @@ Array::last = ->
   return this[this.length-1]
 
 String::port = ->
-  return this.split('/').last().split(/[^0-9]/)[0]
+  return parseInt(this.split('/').last().split(/[^0-9]/)[0])
 
 # games needs: join_lobby, join_game, leave_game, (?) start_game
 socket.sockets.on 'connection', (client) ->
@@ -61,11 +60,15 @@ socket.sockets.on 'connection', (client) ->
   #client.sockets.in(2).emit 'test', { foo: 'bar' }
   client.on 'join_lobby', (data) -> # any user joins the main lobby
     console.log client.id
-    client.join parseInt(data.url.port())
+    client.join data.url.port()
   client.on 'join_game', (data) ->
     console.log 'foo'
-  client.on 'chat', (data) ->
-    console.log 'foo'
+  client.on 'game_message', (data) ->
+    if socket.rooms['/' + data.game.port()].indexOf(client.id) > -1 # if user is in room
+      client.to('/' + data.game.port()).emit 'message', { name: 'Someone', message: data.message }
+      #socket.sockets.in('/' + data.game.port()).emit 'message', { name: 'message', message: 'hi' }
+      #socket.sockets.in('/' + data.game.port()).emit 'message', { name: 'Person', message: data.message } # works, only sends to one.
+      #client.broadcast.to('/' + data.game.port()).emit 'message', { name: 'Person', message: data.message }
 
 port = process.env.PORT || 8080
 app.listen port

@@ -54,7 +54,7 @@
     return this[this.length - 1];
   };
   String.prototype.port = function() {
-    return this.split('/').last().split(/[^0-9]/)[0];
+    return parseInt(this.split('/').last().split(/[^0-9]/)[0]);
   };
   socket.sockets.on('connection', function(client) {
     console.log(' - Game Rooms - ');
@@ -62,13 +62,18 @@
     console.log(' -------------- ');
     client.on('join_lobby', function(data) {
       console.log(client.id);
-      return client.join(parseInt(data.url.port()));
+      return client.join(data.url.port());
     });
     client.on('join_game', function(data) {
       return console.log('foo');
     });
-    return client.on('chat', function(data) {
-      return console.log('foo');
+    return client.on('game_message', function(data) {
+      if (socket.rooms['/' + data.game.port()].indexOf(client.id) > -1) {
+        return client.to('/' + data.game.port()).emit('message', {
+          name: 'Someone',
+          message: data.message
+        });
+      }
     });
   });
   port = process.env.PORT || 8080;

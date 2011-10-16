@@ -23,7 +23,7 @@
   width: 100%;
 }
 
-#players .player a.join {
+#players .player a.join, #chat a {
   color: #fff;
   background: rgb(204, 204, 204);
   -webkit-border-radius: 3px;
@@ -44,18 +44,31 @@
 
 /* chat */
 #chat { /* total: 55% */
-  width: 48.5%;
+  width: 47.5%;
   float: left;
   margin: 40px 5.5% 0 1%;
-  overflow-y: scroll;
-  overflow-x: ;
 }
 
 #chat #display {
-  width: 100%;
+  overflow-y: scroll;
+  overflow-x: visible;
+  width: 98%;
+  padding: 5px .5%;
   border: 1px solid #ccc;
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
   border-radius: 3px;
   height: 140px;
+  margin-bottom: 10px;
+}
+
+#chat a {
+  float: right;
+  margin-top: 0;
+  margin-right: 1%;
+  padding: 5px 8px 4px;
+}
+
+#chat input {
+  width: 80%;
 }
