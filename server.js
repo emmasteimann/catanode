@@ -61,16 +61,20 @@
     console.log(socket.rooms);
     console.log(' -------------- ');
     client.on('join_lobby', function(data) {
-      console.log(client.id);
-      return client.join(data.url.port());
+      client.join(data.url.port());
+      return socket.sockets["in"](data.url.port()).emit('message', {
+        action: 'join',
+        message: 'User has connected to the server.'
+      });
     });
     client.on('join_game', function(data) {
       return console.log('foo');
     });
     return client.on('game_message', function(data) {
       if (socket.rooms['/' + data.game.port()].indexOf(client.id) > -1) {
-        return client.to('/' + data.game.port()).emit('message', {
-          name: 'Someone',
+        return socket.sockets["in"](data.game.port()).emit('message', {
+          action: 'message',
+          name: 'Person',
           message: data.message
         });
       }

@@ -59,16 +59,15 @@ socket.sockets.on 'connection', (client) ->
   #socket.sockets.emit 'connect', { user: 'joined' }
   #client.sockets.in(2).emit 'test', { foo: 'bar' }
   client.on 'join_lobby', (data) -> # any user joins the main lobby
-    console.log client.id
     client.join data.url.port()
+    socket.sockets.in(data.url.port()).emit 'message', { action: 'join', message: 'User has connected to the server.'}
+
   client.on 'join_game', (data) ->
     console.log 'foo'
+
   client.on 'game_message', (data) ->
     if socket.rooms['/' + data.game.port()].indexOf(client.id) > -1 # if user is in room
-      client.to('/' + data.game.port()).emit 'message', { name: 'Someone', message: data.message }
-      #socket.sockets.in('/' + data.game.port()).emit 'message', { name: 'message', message: 'hi' }
-      #socket.sockets.in('/' + data.game.port()).emit 'message', { name: 'Person', message: data.message } # works, only sends to one.
-      #client.broadcast.to('/' + data.game.port()).emit 'message', { name: 'Person', message: data.message }
+      socket.sockets.in(data.game.port()).emit 'message', { action: 'message', name: 'Person', message: data.message } # works, only sends to one.
 
 port = process.env.PORT || 8080
 app.listen port
