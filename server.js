@@ -61,9 +61,13 @@
     console.log(socket.rooms);
     console.log(' -------------- ');
     client.on('join_lobby', function(data) {
-      return client.join(data.url.port());
+      console.log(client.id);
+      return client.join(parseInt(data.url.port()));
     });
-    return client.on('join_game', function(data) {
+    client.on('join_game', function(data) {
+      return console.log('foo');
+    });
+    return client.on('chat', function(data) {
       return console.log('foo');
     });
   });

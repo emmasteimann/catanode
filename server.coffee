@@ -60,8 +60,11 @@ socket.sockets.on 'connection', (client) ->
   #socket.sockets.emit 'connect', { user: 'joined' }
   #client.sockets.in(2).emit 'test', { foo: 'bar' }
   client.on 'join_lobby', (data) -> # any user joins the main lobby
-    client.join data.url.port()
+    console.log client.id
+    client.join parseInt(data.url.port())
   client.on 'join_game', (data) ->
+    console.log 'foo'
+  client.on 'chat', (data) ->
     console.log 'foo'
 
 port = process.env.PORT || 8080
