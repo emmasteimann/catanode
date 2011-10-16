@@ -1,12 +1,11 @@
 (function() {
-  var app, backbone, express, http, port, redis, socket, stylus, _;
+  var Games, app, backbone, express, games, http, port, redis, socket, _;
   http = require('http');
   _ = require('underscore');
   backbone = require('backbone');
   redis = require('redis');
   express = require('express');
   app = express.createServer();
-  stylus = require('stylus');
   socket = require('socket.io').listen(app);
   app.register('.jade', require('jade'));
   app.set('view engine', 'jade');
@@ -14,6 +13,20 @@
     layout: false
   });
   app.use(express.static(__dirname + "/public/"));
+  Games = (function() {
+    function Games(min, max) {
+      var _base, _base2;
+      console.log(typeof min, min, typeof min === 'number');
+      this.minimum = typeof (_base = typeof min === 'number') === "function" ? _base(min || 0) : void 0;
+      this.maximum = typeof (_base2 = typeof max === 'number') === "function" ? _base2(max || 10000) : void 0;
+      this.list = [];
+      console.log(this.minimum);
+    }
+    Games.prototype.create = function() {};
+    return Games;
+  })();
+  games = new Games(0, 1000);
+  console.log(games);
   app.get('/', function(req, res) {
     return res.render('index');
   });
