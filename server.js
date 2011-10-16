@@ -1,5 +1,5 @@
 (function() {
-  var Games, app, backbone, express, games, http, port, redis, socket, _;
+  var app, backbone, express, games, http, port, redis, socket, _;
   http = require('http');
   _ = require('underscore');
   backbone = require('backbone');
@@ -13,40 +13,8 @@
     layout: false
   });
   app.use(express.static(__dirname + "/public/"));
-  Games = (function() {
-    function Games(min, max) {
-      this.minimum = typeof min === 'number' ? min : 0;
-      this.maximum = typeof max === 'number' ? max : 10000;
-      this.list = {};
-      this.new_allowed = true;
-    }
-    Games.prototype.create = function(callback) {
-      var game_id;
-      if (this.new_allowed === false) {
-        return 'No new games may be created';
-      }
-      game_id = this.req_unused_game();
-      this.list[game_id] = {
-        status: 'lobby',
-        players: []
-      };
-      return game_id;
-    };
-    Games.prototype.req_unused_game = function() {
-      var game_id;
-      game_id = Math.floor(Math.random() * this.maximum);
-      if (Object.keys(this.list).length === this.maximum - (this.maximum / 20)) {
-        this.new_allowed = false;
-      }
-      if (this.list[game_id] != null) {
-        return this.req_unused_game();
-      }
-      return game_id;
-    };
-    Games.prototype.purge = function(game_id) {};
-    return Games;
-  })();
-  games = new Games(0, 10000);
+  games = require('./lib/games');
+  console.log(new games.create(0, 9000));
   app.get('/', function(req, res) {
     return res.render('index');
   });
