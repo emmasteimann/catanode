@@ -22,16 +22,23 @@ class Games
     @minimum = if typeof min == 'number' then min else 0
     @maximum = if typeof max == 'number' then max else 10000
     @list = {}
+    @new_allowed = true # whether or not games should be allowed
     
-  create: ->
-    game_id = Math.floor Math.random() * @maximum
-    @list.game_id = {status: '', players: []}
-    #return @create() if @list.game_id?
+  create: (callback) ->
+    return 'No new games may be created' if @new_allowed == false
+    game_id = @req_unused_game()
+    
+    @list[game_id] = { status: 'lobby', players: [] }
   
+  req_unused_game: ->
+    game_id = Math.floor Math.random() * @maximum
+    @new_allowed = false if Object.keys(@list).length == @maximum - 500
+    return @req_unused_game() if @list[game_id]? # re-run method if game is active
+    game_id
+    
   purge: (game_id) ->
 
 games = new Games 0, 10000
-console.log games.create()
 # end games handler
 
 app.get '/', (req, res) ->
