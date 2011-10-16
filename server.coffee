@@ -19,18 +19,19 @@ app.use express.static(__dirname + "/public/")
 # active game handling.
 class Games
   constructor: (min, max)->
-    console.log typeof min, min, typeof min == 'number'
-    @minimum = (typeof min == 'number')? min || 0
-    @maximum = (typeof max == 'number')? max || 10000
-    @list = []
-    console.log @minimum
+    @minimum = if typeof min == 'number' then min else 0
+    @maximum = if typeof max == 'number' then max else 10000
+    @list = {}
     
   create: ->
+    game_id = Math.floor Math.random() * @maximum
+    @list.game_id = {status: '', players: []}
+    #return @create() if @list.game_id?
   
-  
+  purge: (game_id) ->
 
-games = new Games 0, 1000
-console.log games
+games = new Games 0, 10000
+console.log games.create()
 # end games handler
 
 app.get '/', (req, res) ->

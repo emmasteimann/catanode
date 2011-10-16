@@ -15,18 +15,23 @@
   app.use(express.static(__dirname + "/public/"));
   Games = (function() {
     function Games(min, max) {
-      var _base, _base2;
-      console.log(typeof min, min, typeof min === 'number');
-      this.minimum = typeof (_base = typeof min === 'number') === "function" ? _base(min || 0) : void 0;
-      this.maximum = typeof (_base2 = typeof max === 'number') === "function" ? _base2(max || 10000) : void 0;
-      this.list = [];
-      console.log(this.minimum);
+      this.minimum = typeof min === 'number' ? min : 0;
+      this.maximum = typeof max === 'number' ? max : 10000;
+      this.list = {};
     }
-    Games.prototype.create = function() {};
+    Games.prototype.create = function() {
+      var game_id;
+      game_id = Math.floor(Math.random() * this.maximum);
+      return this.list.game_id = {
+        status: '',
+        players: []
+      };
+    };
+    Games.prototype.purge = function(game_id) {};
     return Games;
   })();
-  games = new Games(0, 1000);
-  console.log(games);
+  games = new Games(0, 10000);
+  console.log(games.create());
   app.get('/', function(req, res) {
     return res.render('index');
   });
