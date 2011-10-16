@@ -16,8 +16,8 @@ app.set 'view options', {
 }
 app.use express.static(__dirname + "/public/")
 
-games = require('./lib/games')
-console.log new games.create(0, 9000)
+games_server = require('./lib/games')
+games = new games_server.start(0, 9000)
 
 app.get '/', (req, res) ->
   res.render 'index'

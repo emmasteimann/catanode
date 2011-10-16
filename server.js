@@ -1,5 +1,5 @@
 (function() {
-  var app, backbone, express, games, http, port, redis, socket, _;
+  var app, backbone, express, games, games_server, http, port, redis, socket, _;
   http = require('http');
   _ = require('underscore');
   backbone = require('backbone');
@@ -13,8 +13,8 @@
     layout: false
   });
   app.use(express.static(__dirname + "/public/"));
-  games = require('./lib/games');
-  console.log(new games.create(0, 9000));
+  games_server = require('./lib/games');
+  games = new games_server.start(0, 9000);
   app.get('/', function(req, res) {
     return res.render('index');
   });
