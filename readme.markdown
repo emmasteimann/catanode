@@ -16,14 +16,14 @@ Need to start testing methods and routes.
  * Users change name and seats(?).
  * Start game ability when all seats are full.
 
-## General
-
- * Consider how backbone will be organized.
- * Rembmer structures, points, board, turns, reconnections, materials.
-
 ## Error
 
 Page for when a user attempts to create a game when there is a limit
+
+## General
+
+ * Consider how backbone will be organized.
+ * Remember: structures, points, board, turns, reconnections, materials.
 
 # Complete
 
