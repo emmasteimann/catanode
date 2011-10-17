@@ -11,7 +11,9 @@
       return console.log(data);
     });
     $('a.join').click(function(e) {
-      return false;
+      console.log('foo');
+      e.stopPropagation();
+      return e.preventDefault();
     });
     $('#chat a').click(function(e) {
       var message;
@@ -28,7 +30,13 @@
       return e.preventDefault();
     });
     return socket.on('message', function(data) {
-      return $('#chat #display').append('<p>' + data.name + ': ' + data.message + '</p>');
+      var message;
+      if (data.action === 'join') {
+        message = data.message;
+      } else {
+        message = data.name + ': ' + data.message;
+      }
+      return $('#chat #display').append('<p>' + message + '</p>');
     });
   });
 }).call(this);

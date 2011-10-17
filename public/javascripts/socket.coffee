@@ -27,7 +27,9 @@ jQuery(document).ready ->
     e.preventDefault()
 
   socket.on 'message', (data) ->
-    class = ''
     if data.action == 'join'
-      class = 'connection'
-    $('#chat #display').append('<p class="' + class + '">' + data.name + ': ' + data.message + '</p>')
+      message = data.message
+    else
+      message = data.name + ': ' + data.message
+      
+    $('#chat #display').append('<p>' + message + '</p>')
