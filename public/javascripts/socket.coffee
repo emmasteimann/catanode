@@ -8,9 +8,19 @@ jQuery(document).ready ->
   socket.on 'test', (data) ->
     console.log data
 
-  $('a.join').click (e) ->
+  socket.on 'join_game', (data) ->
     console.log 'foo'
-    #socket.emit 'join_game' { game: document.URL, slot: 1 }
+    data = { slot: 1, name: 'Brad', icon: 'http://placekitten.com/400/400' }
+    slot = $($('.player')[data.slot-1])
+    name = $('<h2>' + data.name + '</h2>')
+    icon = $('<img src=' + data.icon + ' />')
+
+    slot.children().remove()
+    slot.append(name)
+    slot.append(icon)
+
+  $('a.join').click (e) ->
+    socket.emit 'join_game', { game: document.URL, slot: 1 }
     #socket.emit 'join_lobby', { name: $(this).prev().val(), url: document.URL }
 
     e.stopPropagation()

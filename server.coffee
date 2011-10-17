@@ -52,9 +52,6 @@ String::port = ->
   return parseInt(this.split('/').last().split(/[^0-9]/)[0])
 
 socket.sockets.on 'connection', (client) ->
-  console.log ' - Game Rooms - '
-  console.log socket.rooms
-  console.log ' -------------- '
   client.on 'join_lobby', (data) -> # any user joins the main lobby
     client.join data.url.port()
     socket.sockets.in(data.url.port()).emit 'message', { action: 'join', message: 'User has connected to the server.'}
@@ -62,12 +59,13 @@ socket.sockets.on 'connection', (client) ->
   client.on 'join_game', (data) ->
     room = data.game.port()
     if socket.rooms['/' + room].indexOf(client.id) > -1 # if user is in room
-      games.add_player room, data.slot
+      socket.sockets.in(room).emit 'join_game', { action: 'message', name: 'Person', message: data.message }
+      #games.add_player room, data.slot
 
   client.on 'game_message', (data) ->
     room = data.game.port()
     if socket.rooms['/' + room].indexOf(client.id) > -1 # if user is in room
-      socket.sockets.in(room).emit 'message', { action: 'message', name: 'Person', message: data.message } # works, only sends to one.
+      socket.sockets.in(room).emit 'message', { action: 'message', name: 'Person', message: data.message }
 
 port = process.env.PORT || 8080
 app.listen port

@@ -55,9 +55,6 @@
     return parseInt(this.split('/').last().split(/[^0-9]/)[0]);
   };
   socket.sockets.on('connection', function(client) {
-    console.log(' - Game Rooms - ');
-    console.log(socket.rooms);
-    console.log(' -------------- ');
     client.on('join_lobby', function(data) {
       client.join(data.url.port());
       return socket.sockets["in"](data.url.port()).emit('message', {
@@ -69,7 +66,11 @@
       var room;
       room = data.game.port();
       if (socket.rooms['/' + room].indexOf(client.id) > -1) {
-        return games.add_player(room, data.slot);
+        return socket.sockets["in"](room).emit('join_game', {
+          action: 'message',
+          name: 'Person',
+          message: data.message
+        });
       }
     });
     return client.on('game_message', function(data) {

@@ -10,8 +10,26 @@
     socket.on('test', function(data) {
       return console.log(data);
     });
-    $('a.join').click(function(e) {
+    socket.on('join_game', function(data) {
+      var icon, name, slot;
       console.log('foo');
+      data = {
+        slot: 1,
+        name: 'Brad',
+        icon: 'http://placekitten.com/400/400'
+      };
+      slot = $($('.player')[data.slot - 1]);
+      name = $('<h2>' + data.name + '</h2>');
+      icon = $('<img src=' + data.icon + ' />');
+      slot.children().remove();
+      slot.append(name);
+      return slot.append(icon);
+    });
+    $('a.join').click(function(e) {
+      socket.emit('join_game', {
+        game: document.URL,
+        slot: 1
+      });
       e.stopPropagation();
       return e.preventDefault();
     });
