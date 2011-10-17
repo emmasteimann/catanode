@@ -32,20 +32,18 @@
       });
     }
   });
+  app.get('/error', function(req, res) {});
   app.get('/connect', function(req, res) {
     return res.render('index');
   });
   app.get('/connect/:game_id', function(req, res) {
-    var item, players;
-    players = [];
-    for (item = 1; item <= 4; item++) {
-      players.push('');
+    if (!games.list[req.params.game_id]) {
+      games.create(req.params.game_id);
     }
-    console.log(players);
     return res.render('setup', {
       locals: {
         game_id: req.params.game_id,
-        players: players,
+        players: games.list[req.params.game_id].players,
         url: req.headers.host + req.url
       }
     });
@@ -68,11 +66,17 @@
       });
     });
     client.on('join_game', function(data) {
-      return console.log('foo');
+      var room;
+      room = data.game.port();
+      if (socket.rooms['/' + room].indexOf(client.id) > -1) {
+        return games.add_player(room, data.slot);
+      }
     });
     return client.on('game_message', function(data) {
-      if (socket.rooms['/' + data.game.port()].indexOf(client.id) > -1) {
-        return socket.sockets["in"](data.game.port()).emit('message', {
+      var room;
+      room = data.game.port();
+      if (socket.rooms['/' + room].indexOf(client.id) > -1) {
+        return socket.sockets["in"](room).emit('message', {
           action: 'message',
           name: 'Person',
           message: data.message

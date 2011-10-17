@@ -9,16 +9,20 @@ jQuery(document).ready ->
     console.log data
 
   $('a.join').click (e) ->
+    console.log 'foo'
+    #socket.emit 'join_game' { game: document.URL, slot: 1 }
     #socket.emit 'join_lobby', { name: $(this).prev().val(), url: document.URL }
-    return false
+
+    e.stopPropagation()
+    e.preventDefault()
 
   # chat
-
   $('#chat a').click (e) ->
     message = $(this).prev().val()
     if message
       socket.emit 'game_message', { name: 'Name', message: message, game: document.URL }
       $(this).prev().val('')
+
     e.stopPropagation()
     e.preventDefault()
 

@@ -17,6 +17,7 @@ app.use express.static(__dirname + "/public/")
 
 games_server = require('./lib/games')
 games = new games_server.start(0, 9000)
+# games = require('./lib/games').start(0, 10000) # change to this
 
 app.get '/', (req, res) ->
   res.render 'index'
@@ -30,19 +31,18 @@ app.get '/create', (req, res) ->
     res.redirect '/error', locals:
                            reason: game_port
 
+app.get '/error', (req, res) ->
+
 app.get '/connect', (req, res) ->
   res.render 'index'
 
 app.get '/connect/:game_id', (req, res) ->
-  # test players
-  players = []
-  for item in [1..4]
-    players.push ''
-  console.log players
-  # end test
+  if !games.list[req.params.game_id]
+    games.create(req.params.game_id)
+
   res.render 'setup', locals:
                       game_id: req.params.game_id
-                      players: players,
+                      players: games.list[req.params.game_id].players,
                       url: req.headers.host + req.url
 
 Array::last = ->
@@ -51,23 +51,23 @@ Array::last = ->
 String::port = ->
   return parseInt(this.split('/').last().split(/[^0-9]/)[0])
 
-# games needs: join_lobby, join_game, leave_game, (?) start_game
 socket.sockets.on 'connection', (client) ->
   console.log ' - Game Rooms - '
   console.log socket.rooms
   console.log ' -------------- '
-  #socket.sockets.emit 'connect', { user: 'joined' }
-  #client.sockets.in(2).emit 'test', { foo: 'bar' }
   client.on 'join_lobby', (data) -> # any user joins the main lobby
     client.join data.url.port()
     socket.sockets.in(data.url.port()).emit 'message', { action: 'join', message: 'User has connected to the server.'}
 
   client.on 'join_game', (data) ->
-    console.log 'foo'
+    room = data.game.port()
+    if socket.rooms['/' + room].indexOf(client.id) > -1 # if user is in room
+      games.add_player room, data.slot
 
   client.on 'game_message', (data) ->
-    if socket.rooms['/' + data.game.port()].indexOf(client.id) > -1 # if user is in room
-      socket.sockets.in(data.game.port()).emit 'message', { action: 'message', name: 'Person', message: data.message } # works, only sends to one.
+    room = data.game.port()
+    if socket.rooms['/' + room].indexOf(client.id) > -1 # if user is in room
+      socket.sockets.in(room).emit 'message', { action: 'message', name: 'Person', message: data.message } # works, only sends to one.
 
 port = process.env.PORT || 8080
 app.listen port
