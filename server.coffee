@@ -41,9 +41,9 @@ app.get '/connect/:game_id', (req, res) ->
     games.create(req.params.game_id)
 
   res.render 'setup', locals:
-                      game_id: req.params.game_id
-                      players: games.list[req.params.game_id].players,
-                      url: req.headers.host + req.url
+                        game_id: req.params.game_id,
+                        players: games.list[req.params.game_id].players,
+                        url: req.headers.host + req.url
 
 Array::last = ->
   return this[this.length-1]
