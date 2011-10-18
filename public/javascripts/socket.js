@@ -12,11 +12,6 @@
     });
     socket.on('join_game', function(data) {
       var icon, name, slot;
-      data = {
-        slot: 1,
-        name: 'Brad',
-        icon: 'http://placekitten.com/400/400'
-      };
       slot = $($('.player')[data.slot - 1]);
       name = $('<h2>' + data.name + '</h2>');
       icon = $('<img src=' + data.icon + ' />');
@@ -27,7 +22,7 @@
     $('a.join').click(function(e) {
       socket.emit('join_game', {
         game: document.URL,
-        slot: $('.players').index($(this).parent()),
+        slot: $('.player').index($(this).parent()) + 1,
         name: $(this).prev().val()
       });
       e.stopPropagation();

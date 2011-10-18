@@ -63,15 +63,17 @@
       });
     });
     client.on('join_game', function(data) {
-      var room, slot;
+      var player, room, slot;
       room = data.game.port();
       slot = data.slot !== -1 ? data.slot : 1;
       if (socket.rooms['/' + room].indexOf(client.id) > -1) {
-        if (games.add_player(room, data.slot, data.name)) {
+        player = games.add_player(room, data.slot, data.name);
+        if (player) {
           return socket.sockets["in"](room).emit('join_game', {
-            action: 'message',
+            action: 'has joined the game.',
             name: data.name,
-            message: 'has joined the game.'
+            slot: slot,
+            icon: player.icon
           });
         }
       }

@@ -9,7 +9,6 @@ jQuery(document).ready ->
     console.log data
 
   socket.on 'join_game', (data) ->
-    data = { slot: 1, name: 'Brad', icon: 'http://placekitten.com/400/400' }
     slot = $($('.player')[data.slot-1])
     name = $('<h2>' + data.name + '</h2>')
     icon = $('<img src=' + data.icon + ' />')
@@ -19,8 +18,9 @@ jQuery(document).ready ->
     slot.append(icon)
 
   $('a.join').click (e) ->
-    socket.emit 'join_game', { game: document.URL, slot: $('.players').index($(this).parent()), name: $(this).prev().val() }
+    socket.emit 'join_game', { game: document.URL, slot: $('.player').index($(this).parent()) + 1, name: $(this).prev().val() }
     #socket.emit 'join_lobby', { name: $(this).prev().val(), url: document.URL }
+    # action: 'has joined the game.', name: data.name, slot: slot
 
     e.stopPropagation()
     e.preventDefault()

@@ -15,8 +15,8 @@ html(lang="en")
         - each player in players
           .player
             - if(player.name)
-              img(src='#{player.icon}')
               h2= player.name
+              img(src='#{player.icon}')
               p= player.status
             - else
               input(type='text', value='name', maxlength='25')
