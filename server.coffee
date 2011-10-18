@@ -58,9 +58,10 @@ socket.sockets.on 'connection', (client) ->
 
   client.on 'join_game', (data) ->
     room = data.game.port()
+    slot = if data.slot != -1 then data.slot else 1
     if socket.rooms['/' + room].indexOf(client.id) > -1 # if user is in room
-      socket.sockets.in(room).emit 'join_game', { action: 'message', name: 'Person', message: data.message }
-      #games.add_player room, data.slot
+      if games.add_player room, data.slot, data.name
+        socket.sockets.in(room).emit 'join_game', { action: 'message', name: data.name, message: 'has joined the game.' }
 
   client.on 'game_message', (data) ->
     room = data.game.port()
@@ -69,3 +70,4 @@ socket.sockets.on 'connection', (client) ->
 
 port = process.env.PORT || 8080
 app.listen port
+console.log 'Server listening on port: ' + port

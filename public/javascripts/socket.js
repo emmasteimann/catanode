@@ -12,7 +12,6 @@
     });
     socket.on('join_game', function(data) {
       var icon, name, slot;
-      console.log('foo');
       data = {
         slot: 1,
         name: 'Brad',
@@ -28,7 +27,8 @@
     $('a.join').click(function(e) {
       socket.emit('join_game', {
         game: document.URL,
-        slot: 1
+        slot: $('.players').index($(this).parent()),
+        name: $(this).prev().val()
       });
       e.stopPropagation();
       return e.preventDefault();

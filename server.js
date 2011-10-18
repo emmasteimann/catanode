@@ -63,14 +63,17 @@
       });
     });
     client.on('join_game', function(data) {
-      var room;
+      var room, slot;
       room = data.game.port();
+      slot = data.slot !== -1 ? data.slot : 1;
       if (socket.rooms['/' + room].indexOf(client.id) > -1) {
-        return socket.sockets["in"](room).emit('join_game', {
-          action: 'message',
-          name: 'Person',
-          message: data.message
-        });
+        if (games.add_player(room, data.slot, data.name)) {
+          return socket.sockets["in"](room).emit('join_game', {
+            action: 'message',
+            name: data.name,
+            message: 'has joined the game.'
+          });
+        }
       }
     });
     return client.on('game_message', function(data) {
@@ -87,4 +90,5 @@
   });
   port = process.env.PORT || 8080;
   app.listen(port);
+  console.log('Server listening on port: ' + port);
 }).call(this);
