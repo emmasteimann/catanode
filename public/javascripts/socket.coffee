@@ -1,6 +1,8 @@
 socket = io.connect('http://localhost/')
 
 jQuery(document).ready ->
+  self = @
+  self.username = 'Name'
   socket.on 'connect', (data) ->
     socket.emit 'join_lobby', { url: document.URL }
     #game = data.game_id
@@ -13,14 +15,14 @@ jQuery(document).ready ->
     name = $('<h2>' + data.name + '</h2>')
     icon = $('<img src=' + data.icon + ' />')
 
+    self.username = data.name
+
     slot.children().remove()
     slot.append(name)
     slot.append(icon)
 
   $('a.join').click (e) ->
     socket.emit 'join_game', { game: document.URL, slot: $('.player').index($(this).parent()) + 1, name: $(this).prev().val() }
-    #socket.emit 'join_lobby', { name: $(this).prev().val(), url: document.URL }
-    # action: 'has joined the game.', name: data.name, slot: slot
 
     e.stopPropagation()
     e.preventDefault()
@@ -29,7 +31,7 @@ jQuery(document).ready ->
   $('#chat a').click (e) ->
     message = $(this).prev().val()
     if message
-      socket.emit 'game_message', { name: 'Name', message: message, game: document.URL }
+      socket.emit 'game_message', { name: self.username || 'Name', message: message, game: document.URL }
       $(this).prev().val('')
 
     e.stopPropagation()

@@ -67,7 +67,7 @@ socket.sockets.on 'connection', (client) ->
   client.on 'game_message', (data) ->
     room = data.game.port()
     if socket.rooms['/' + room].indexOf(client.id) > -1 # if user is in room
-      socket.sockets.in(room).emit 'message', { action: 'message', name: 'Person', message: data.message }
+      socket.sockets.in(room).emit 'message', { action: 'message', name: data.name, message: data.message }
 
 port = process.env.PORT || 8080
 app.listen port

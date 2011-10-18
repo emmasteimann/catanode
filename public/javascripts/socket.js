@@ -2,6 +2,9 @@
   var socket;
   socket = io.connect('http://localhost/');
   jQuery(document).ready(function() {
+    var self;
+    self = this;
+    self.username = 'Name';
     socket.on('connect', function(data) {
       return socket.emit('join_lobby', {
         url: document.URL
@@ -15,6 +18,7 @@
       slot = $($('.player')[data.slot - 1]);
       name = $('<h2>' + data.name + '</h2>');
       icon = $('<img src=' + data.icon + ' />');
+      self.username = data.name;
       slot.children().remove();
       slot.append(name);
       return slot.append(icon);
@@ -33,7 +37,7 @@
       message = $(this).prev().val();
       if (message) {
         socket.emit('game_message', {
-          name: 'Name',
+          name: self.username || 'Name',
           message: message,
           game: document.URL
         });

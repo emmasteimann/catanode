@@ -84,7 +84,7 @@
       if (socket.rooms['/' + room].indexOf(client.id) > -1) {
         return socket.sockets["in"](room).emit('message', {
           action: 'message',
-          name: 'Person',
+          name: data.name,
           message: data.message
         });
       }
