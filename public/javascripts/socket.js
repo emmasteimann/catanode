@@ -1,6 +1,6 @@
 (function() {
   var socket;
-  socket = io.connect('http://localhost/');
+  socket = io.connect('http://10.1.3.22/');
   jQuery(document).ready(function() {
     var self;
     self = this;

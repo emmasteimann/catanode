@@ -1,4 +1,4 @@
-socket = io.connect('http://localhost/')
+socket = io.connect('http://10.1.3.22/') # change to server.
 
 jQuery(document).ready ->
   self = @
