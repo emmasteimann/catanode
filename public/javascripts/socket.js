@@ -1,6 +1,6 @@
 (function() {
   var socket;
-  socket = io.connect('http://10.1.3.22/');
+  socket = io.connect('http://http://10.1.3.22/');
   jQuery(document).ready(function() {
     var self;
     self = this;
@@ -9,9 +9,6 @@
       return socket.emit('join_lobby', {
         url: document.URL
       });
-    });
-    socket.on('test', function(data) {
-      return console.log(data);
     });
     socket.on('join_game', function(data) {
       var icon, name, slot;
